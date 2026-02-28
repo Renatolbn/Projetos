@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet" />
+    <title>LogicLab JS</title>
+  </head>
+  <body>
+    <header>
+      <h1 class="titulo">
+        <span>&lt;/&gt;</span>
+        LogicLab JS
+      </h1>
+      <nav class="nav">
+        <ul class="lista">
+          <li class="item-lista"><a href="#exercicios">Exercicios</a></li>
+          <li class="item-lista"><a href="#sobre">Sobre</a></li>
+          <li class="item-lista"><a href="#contato">Contatos</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="sobre">
+        <section class="descricao">
+          <h2>Aprendendo lógica de programação com Javascript</h2>
+          <p>
+            Dominando os fundamentos da programação através de exercícios práticos organizados por
+            categoria. Do básico ao avançado.
+          </p>
+        </section>
+        <section class="atributos">
+          <article class="atributos-card">
+            <img src="assets/icones/book.png" alt="book_icon" />
+            <h3>Exercicios Práticos</h3>
+            <p>Aprenda fazendo do zero com exemplos reais e aplicáveis</p>
+          </article>
+          <article class="atributos-card">
+            <img src="assets/icones/zap.png" alt="zap_icon" />
+            <h3>Progressão Gradual</h3>
+            <p>Do básico ao avançado, seguindo seu próprio ritmo</p>
+          </article>
+          <article class="atributos-card">
+            <img src="assets/icones/trophy.png" alt="trophy_icon" />
+            <h3>Categorias Organizadas</h3>
+            <p>Conteúdo estruturado por tópicos de aprendizado</p>
+          </article>
+        </section>
+      </section>
+      <section class="exercicios">
+        <div class="cabecalho-filtros">
+          <h2>Categorias de Exercícios</h2>
+          <div class="filtros">
+            <button class="btn-filtro active" data-categoria="all">Todos</button>
+            <button class="btn-filtro" data-categoria="imperative">Imperativos</button>
+            <button class="btn-filtro" data-categoria="conditional">Condicionais</button>
+            <button class="btn-filtro" data-categoria="loops">Loops</button>
+            <button class="btn-filtro" data-categoria="functions">Funções</button>
+            <button class="btn-filtro" data-categoria="arrays">Arrays</button>
+            <button class="btn-filtro" data-categoria="objects">Objetos</button>
+            <button class="btn-filtro" data-categoria="challenges">Desafios</button>
+          </div>
+          <input type="text" id="input-filtro" placeholder="Buscar exercício..." />
+          <button class="btn-novo" onclick="abrirModal()">+ Novo Exercício</button>
+        </div>
+        <!-- CONTAINER DOS CARDS (JS vai popular) -->
+        <div class="grid-exercicios" id="lista-exercicios">
+          <!-- SEUS CARDS AQUI - JS popula automaticamente -->
+        </div>
+      </section>
+      <!-- ÁREA DO EXERCÍCIO ATIVO (OCULTA) -->
+      <section id="area-exercicio" class="area-exercicio hidden">
+        <div class="exercicio-container">
+          <button class="btn-voltar" onclick="voltarLista()">← Voltar aos Exercícios</button>
+          <div id="conteudo-exercicio">
+            <!-- CONTEÚDO DINÂMICO DO EXERCÍCIO AQUI -->
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="contato">
+        <h2>Contatos</h2>
+        <div class="redes-sociais">
+          <a href="https://linkedin.com/in/renato-lins-21a32a52" target="_blank" rel="noopener">
+            <img src="assets/img/linkedin_logo.png" alt="LinkedIn" />
+            LinkedIn
+          </a>
+          <a href="https://github.com/Renatolbn" target="_blank" rel="noopener">
+            <img src="assets/img/github_icon.png" alt="GitHub" />
+            GitHub
+          </a>
+        </div>
+      </div>
+      <div class="duvidas">
+        <h3>Envie sua dúvida:</h3>
+        <form action="https://formsubmit.co/renatolbn@gmail.com" method="POST">
+          <input type="text" name="name" placeholder="Nome" required />
+          <textarea name="message" placeholder="Dúvidas JS" required></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </footer>
+
+    <!-- MODAL DE NOVO EXERCÍCIO -->
+    <div id="modal-exercicio" class="modal">
+      <div class="modal-content">
+        <h2>Novo Exercício</h2>
+
+        <input id="titulo" placeholder="Título do exercício" />
+        <input id="categoria" placeholder="Categoria" />
+        <textarea id="descricao" placeholder="Descrição"></textarea>
+
+        <label>Código da Função JS:</label>
+        <textarea id="codigo" placeholder="Executar Função"></textarea>
+
+        <h4>Inputs do exercício</h4>
+        <div id="inputs-container"></div>
+
+        <button onclick="adicionarInput()">+ Adicionar Input</button>
+
+        <div class="modal-acoes">
+          <button onclick="salvarExercicio()">Salvar</button>
+          <button onclick="fecharModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
