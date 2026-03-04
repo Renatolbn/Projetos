@@ -215,6 +215,8 @@ header {
   border-radius: 8px;
   padding: 20px;
   perspective: 1000px;
+  height: 300px;
+  max-width: 670px;
 }
 
 .titulo-card {
@@ -246,22 +248,26 @@ header {
 .card-inner {
   position: relative;
   width: 100%;
+  height: 100%; /* ← ocupa a altura do pai */
   transition: transform 0.6s;
   transform-style: preserve-3d;
-}
-
-.card-exercicio.virado .card-inner {
-  transform: rotateY(180deg);
 }
 
 .card-front,
 .card-back {
   position: absolute;
   width: 100%;
+  height: 100%; /* ← ocupa tudo */
   backface-visibility: hidden;
   background: #fff;
   border-radius: 10px;
   padding: 20px;
+  box-sizing: border-box; /* ← evita estourar a largura com o padding */
+  overflow-y: auto; /* ← se o conteúdo for grande, rola ao invés de vazar */
+}
+
+.card-exercicio.virado .card-inner {
+  transform: rotateY(180deg);
 }
 
 .card-back {
