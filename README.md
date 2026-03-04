@@ -11,7 +11,8 @@ nota1 → Número
 nota2 → Número
 
 Código da função — cole isso:
-jsnota1 = parseFloat(nota1);
+
+nota1 = parseFloat(nota1);
 nota2 = parseFloat(nota2);
 
 if (isNaN(nota1) || nota1 < 0 || isNaN(nota2) || nota2 < 0) {
@@ -27,6 +28,7 @@ if (media === 10) {
 } else {
   return `${media} - Reprovado!`;
 }
+
 A diferença principal:
 js// ❌ antes — pegava valor pelo prompt
 let nota1 = parseFloat(prompt("Primeira nota:"));
