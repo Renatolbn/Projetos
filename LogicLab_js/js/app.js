@@ -43,16 +43,60 @@ function renderizarExercicios() {
   container.innerHTML = "";
 
   exercicios.forEach((exercicio) => {
-    const card = document.createElement("div"); // Cria a Div do card na memória(ainda não aparece na tela)
-    card.classList.add("card-exercicio"); //Adiciona uma classe CSS nesse elemento criado, para você poder estilizar esse card no CSS
+    console.log(exercicio);
 
-    card.innerHTML = `
+    const card = document.createElement("div");
+    card.classList.add("card-exercicio");
+
+    const cardInner = document.createElement("div");
+    cardInner.classList.add("card-inner");
+
+    const cardFront = document.createElement("div");
+    cardFront.classList.add("card-front");
+
+    const cardBack = document.createElement("div");
+    cardBack.classList.add("card-back");
+
+    // FRENTE DO CARD
+
+    cardFront.innerHTML = `
       <div class= "titulo-card">
       <h3>${exercicio.title}</h3>
       <span class="tag">${exercicio.category}</span>
       </div>
       <p>${exercicio.description}</p>
     `;
+
+    // VERSO DO CARD
+
+    cardBack.innerHTML = `
+    <h4>Código:</h4>
+    <pre><code>${exercicio.codigo || "Sem código cadastrado."}</code></pre>
+
+    <h4>Explicação:</h4>
+    <p>${exercicio.explicacao || "Sem explicação cadastrada."}</p>
+    `;
+
+    // BOTÃO VER CÓDIGO (VIRAR CARD)
+    const btnVerCodigo = document.createElement("button");
+    btnVerCodigo.textContent = "Ver código";
+
+    btnVerCodigo.addEventListener("click", () => {
+      card.classList.toggle("virado");
+    });
+
+    // BOTÃO VOLTAR (VERSO)
+    const btnVoltar = document.createElement("button");
+    btnVoltar.textContent = "Voltar";
+
+    btnVoltar.addEventListener("click", () => {
+      card.classList.remove("virado");
+    });
+
+    cardFront.appendChild(btnVerCodigo);
+    cardBack.appendChild(btnVoltar);
+
+    //AÇÕES (EDITAR / EXCLUIR)
 
     const areaAcoes = document.createElement("div");
     areaAcoes.classList.add("acoes-card");
@@ -68,13 +112,13 @@ function renderizarExercicios() {
 
     areaAcoes.appendChild(btnEditar);
     areaAcoes.appendChild(btnExcluir);
-
-    card.appendChild(areaAcoes);
+    cardFront.appendChild(areaAcoes);
 
     // ÁREA DE INPUTS
 
     const areaInputs = document.createElement("div");
     areaInputs.classList.add("area-inputs");
+
     (exercicio.inputs || []).forEach((inp) => {
       const input = document.createElement("input");
       input.placeholder = inp.label;
@@ -83,7 +127,7 @@ function renderizarExercicios() {
       areaInputs.appendChild(input);
     });
 
-    card.appendChild(areaInputs);
+    cardFront.appendChild(areaInputs);
 
     // BOTÃO EXECUTAR
 
@@ -97,7 +141,11 @@ function renderizarExercicios() {
         const valores = [];
 
         areaInputs.querySelectorAll("input").forEach((i) => {
-          valores.push(i.value);
+          if (i.type === "number") {
+            valores.push(parseFloat(i.value));
+          } else {
+            valores.push(i.value);
+          }
         });
 
         const resultado = exercicio.executar(...valores);
@@ -110,9 +158,14 @@ function renderizarExercicios() {
         resultadoBox.textContent = "Resultado: " + resultado;
       } catch (erro) {
         console.error("Erro ao executar exercício:", erro);
-        resultadoBox.textContent = "⚠️ Ocorreu um erro ao executar o exercício.";
+        resultadoBox.textContent = " Ocorreu um erro ao executar o exercício.";
       }
     });
+
+    cardFront.appendChild(btnExecutar);
+    cardFront.appendChild(resultadoBox);
+
+    //BOTÃO EXCLUIR
 
     btnExcluir.addEventListener("click", async () => {
       console.log("clicou em excluir", exercicio.id);
@@ -135,42 +188,64 @@ function renderizarExercicios() {
       document.getElementById("categoria").value = exercicio.category;
       document.getElementById("descricao").value = exercicio.description;
       document.getElementById("codigo").value = exercicio.codigo;
+      document.getElementById("explicacao").value = exercicio.explicacao || "";
 
       // limpar inputs antigos
+
       inputsTemp = [];
-      const container = document.getElementById("inputs-container");
-      container.innerHTML = "";
+      const containerInputs = document.getElementById("inputs-container");
+      containerInputs.innerHTML = "";
 
-      exercicio.inputs.forEach((input) => {
+      (exercicio.inputs || []).forEach((input) => {
         adicionarInput();
-
         const ultimo = inputsTemp[inputsTemp.length - 1];
         ultimo.input.value = input.label;
-        ultimo.tipo.value = input.type;
+
+        const radio = ultimo.tipo.querySelector(`input[value="${input.type}"]`);
+        if (radio) radio.checked = true;
       });
 
       abrirModal();
     });
 
-    card.appendChild(btnExecutar);
-    card.appendChild(resultadoBox);
+    cardInner.appendChild(cardFront);
+    cardInner.appendChild(cardBack);
 
+    card.appendChild(cardInner);
     container.appendChild(card);
   });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   carregarExercicios();
+
+ 
+  document
+    .getElementById("btn-add-input")
+    .addEventListener("click", adicionarInput);
+
+  document
+    .getElementById("btn-salvar")
+    .addEventListener("click", salvarExercicio);
+
+  document.getElementById("btn-cancelar").addEventListener("click", () => {
+    exercicioEditando = null;
+    inputsTemp = [];
+    document.getElementById("inputs-container").innerHTML = "";
+    fecharModal();
+  });
 });
 
 // CONTROLE MODAL
 
 function abrirModal() {
-  document.getElementById("modal-exercicio").style.display = "block";
+  const modal = document.getElementById("modal-exercicio");
+  modal.style.display = "block";
 }
 
 function fecharModal() {
-  document.getElementById("modal-exercicio").style.display = "none";
+  const modal = document.getElementById("modal-exercicio");
+  modal.style.display = "none";
 }
 
 // ADD INPUTS DINÂMICOS
@@ -208,6 +283,7 @@ async function salvarExercicio() {
     category: document.getElementById("categoria").value,
     description: document.getElementById("descricao").value,
     codigo: document.getElementById("codigo").value,
+    explicacao: document.getElementById("explicacao").value,
     inputs: inputsTemp.map((i) => ({
       label: i.input.value,
       type: i.tipo.querySelector("input:checked").value,
