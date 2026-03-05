@@ -19,7 +19,7 @@ async function carregarExercicios() {
     const resposta = await fetch("http://localhost:3000/exercicios");
     const dados = await resposta.json();
 
-    console.log("dados do backend:", dados);
+    console.log("Dados do backend:", dados);
 
     exercicios = dados.map((ex) => ({
       ...ex,

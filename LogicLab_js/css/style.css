@@ -283,12 +283,14 @@ header {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.65);
   z-index: 999;
+  overflow-y: auto; /* scroll no fundo escuro */
+  padding: 20px 0; /* respiro no topo e fundo */
 }
 
 .modal-content {
   background: #fff;
   width: 420px;
-  margin: 8% auto;
+  margin: 0px auto;
   padding: 20px;
   border-radius: 12px;
   display: flex;
@@ -301,6 +303,11 @@ header {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+ /* width: 100%; 
+  box-sizing: border-box; 
+  resize: vertical; 
+  max-width: 100%; */
+  
 }
 
 .modal-acoes {
