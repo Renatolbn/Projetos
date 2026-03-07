@@ -2,7 +2,7 @@
   {
     "id": "1772643405049",
     "title": "Média do aluno",
-    "category": "Condicionais",
+    "category": "condicional",
     "description": "Informar as 2 notas do aluno, calcular média",
     "codigo": "nota1 = parseFloat(nota1); \nnota2 = parseFloat(nota2);\n\nif (isNaN(nota1) || nota1 < 0 || nota1 > 10 || isNaN(nota2) || nota2 < 0 || nota2 > 10) {\n  return \"Valor inválido!\";\n}\n  const media = (nota1 + nota2) / 2;\n\n  if (media === 10) {\n  return `${media} - Aprovado com mérito!`;\n} else if (media >= 7) {\n  return `${media} - Aprovado`;\n} else {\n  return `${media} - Reprovado!`;\n}\n",
     "explicacao": "O código recebe duas notas, converte-as para número decimal e valida se são números válidos e não negativos. Em seguida, calcula a média entre elas e retorna uma mensagem de acordo com o resultado: \"Aprovado com mérito\" se a média for 10, \"Aprovado\" se for 7 ou mais, e \"Reprovado\" se for menor que 7.",
@@ -13,7 +13,7 @@
       },
       {
         "label": "nota2",
-        "type": "number"
+        "type": "text"
       }
     ]
   }

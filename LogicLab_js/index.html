@@ -60,19 +60,17 @@
             <button class="btn-filtro active" data-categoria="all">
               Todos
             </button>
-            <button class="btn-filtro" data-categoria="imperative">
+            <button class="btn-filtro" data-categoria="imperativo">
               Imperativos
             </button>
-            <button class="btn-filtro" data-categoria="conditional">
+            <button class="btn-filtro" data-categoria="condicional">
               Condicionais
             </button>
             <button class="btn-filtro" data-categoria="loops">Loops</button>
-            <button class="btn-filtro" data-categoria="functions">
-              Funções
-            </button>
+            <button class="btn-filtro" data-categoria="funções">Funções</button>
             <button class="btn-filtro" data-categoria="arrays">Arrays</button>
-            <button class="btn-filtro" data-categoria="objects">Objetos</button>
-            <button class="btn-filtro" data-categoria="challenges">
+            <button class="btn-filtro" data-categoria="objetos">Objetos</button>
+            <button class="btn-filtro" data-categoria="desafios">
               Desafios
             </button>
           </div>
@@ -139,7 +137,16 @@
         <input id="titulo" placeholder="Título do exercício" />
 
         <label>Categoria:</label>
-        <input id="categoria" placeholder="Categoria" />
+        <select id="categoria">
+          <option value="">Selecione uma categoria</option>
+          <option value="imperativo">Imperativos</option>
+          <option value="condicional">Condicionais</option>
+          <option value="loops">Loops</option>
+          <option value="funções">Funções</option>
+          <option value="arrays">Arrays</option>
+          <option value="objetos">Objetos</option>
+          <option value="desafios">Desafios</option>
+        </select>
 
         <label>Descrição:</label>
         <textarea id="descricao" placeholder="Descrição"></textarea>
