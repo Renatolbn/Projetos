@@ -1,7 +1,7 @@
 //  LISTA  DE EXERCÍCIOS
 
 let exercicios = [];
-
+let todosExercicios = [];
 let exercicioEditando = null;
 
 function montarFuncao(exercicio) {
@@ -16,7 +16,7 @@ function montarFuncao(exercicio) {
 
 async function carregarExercicios() {
   try {
-    const resposta = await fetch("http://localhost:3000/exercicios");
+    const resposta = await fetch("/exercicios");
     const dados = await resposta.json();
 
     console.log("Dados do backend:", dados);
@@ -28,7 +28,9 @@ async function carregarExercicios() {
 
     console.log("lista tratada:", exercicios);
 
-    renderizarExercicios();
+    todosExercicios = exercicios;
+
+    renderizarExercicios(exercicios);
   } catch (erro) {
     console.error("Erro ao carregar exercícios:", erro);
   }
@@ -36,13 +38,13 @@ async function carregarExercicios() {
 
 //  RENDERIZAÇÃO DOS CARDS
 
-function renderizarExercicios() {
+function renderizarExercicios(lista = exercicios) {
   const container = document.getElementById("lista-exercicios");
 
   // limpa a tela para evitar duplicação
   container.innerHTML = "";
 
-  exercicios.forEach((exercicio) => {
+  lista.forEach((exercicio) => {
     console.log(exercicio);
 
     const card = document.createElement("div");
@@ -172,7 +174,7 @@ function renderizarExercicios() {
       const confirmar = confirm("Tem certeza que deseja excluir?");
       if (!confirmar) return;
 
-      await fetch(`http://localhost:3000/exercicios/${exercicio.id}`, {
+      await fetch(`/exercicios/${exercicio.id}`, {
         method: "DELETE",
       });
 
@@ -216,10 +218,45 @@ function renderizarExercicios() {
   });
 }
 
+//FILTROS
+
+function aplicarFiltros() {
+  const categoriaAtiva =
+    document.querySelector(".btn-filtro.active").dataset.categoria;
+  const textoBusca = document
+    .getElementById("input-filtro")
+    .value.toLowerCase();
+
+  const filtrados = todosExercicios.filter((ex) => {
+    const passaCategoria =
+      categoriaAtiva === "all" || ex.category === categoriaAtiva;
+    const passaBusca = ex.title.toLowerCase().includes(textoBusca);
+    return passaCategoria && passaBusca;
+  });
+  renderizarExercicios(filtrados);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   carregarExercicios();
 
- 
+  //FILTRO CATEGORIA
+
+  document.querySelectorAll(".btn-filtro").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".btn-filtro")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      aplicarFiltros();
+    });
+  });
+
+  //FILTRO POR BUSCA
+
+  document
+    .getElementById("input-filtro")
+    .addEventListener("input", aplicarFiltros);
+
   document
     .getElementById("btn-add-input")
     .addEventListener("click", adicionarInput);
@@ -266,12 +303,27 @@ function adicionarInput() {
   <label><input type="radio" name="tipo-${inputsTemp.length}" value="number"> Número</label>
   `;
 
-  // adiciona na tela
-  container.appendChild(inputLabel);
-  container.appendChild(tipo);
+  // botão deletar input
+  const btnDeletar = document.createElement("button");
+  btnDeletar.textContent = "Remover";
+
+  // adiciona na tela (com wrapper)
+  const wrapper = document.createElement("div");
+  wrapper.appendChild(inputLabel);
+  wrapper.appendChild(tipo);
+  wrapper.appendChild(btnDeletar);
+
+  // remove o wrapper do DOM e do inputsTemp
+  btnDeletar.addEventListener("click", () => {
+    const index = inputsTemp.findIndex((i) => i.wrapper === wrapper);
+    inputsTemp.splice(index, 1);
+    wrapper.remove();
+  });
+
+  container.appendChild(wrapper);
 
   // salva no array temporário
-  inputsTemp.push({ input: inputLabel, tipo });
+  inputsTemp.push({ input: inputLabel, tipo, wrapper });
 }
 
 //SALVAR EXERCÍCIO (INTEGRA COM A API)
@@ -290,12 +342,12 @@ async function salvarExercicio() {
     })),
   };
 
-  let url = "http://localhost:3000/exercicios";
+  let url = "/exercicios";
   let metodo = "POST";
 
   // se estiver editando
   if (exercicioEditando) {
-    url = `http://localhost:3000/exercicios/${exercicio.id}`;
+    url = `/exercicios/${exercicio.id}`;
     metodo = "PUT";
   }
 
